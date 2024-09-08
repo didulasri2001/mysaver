@@ -13,15 +13,15 @@ function Hero() {
           </h1>
 
           <p className="mt-4 sm:text-xl/relaxed">
-            start Creating Your Budget and Save Ton of Money
+            Start Creating Your Budget and Save Ton of Money
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <a
               className="block w-full rounded bg-blue-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-[#2e81b4]-700 focus:outline-none focus:ring active:bg-[#2e81b4]-500 sm:w-auto"
-              href="#"
+              href="/sign-in"
             >
-              Get Started
+              Sign In
             </a>
           </div>
         </div>
