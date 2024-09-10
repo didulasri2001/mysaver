@@ -3,8 +3,10 @@ import CreateBudget from "./CreateBudget";
 
 function BudgetList() {
   return (
-    <div>
-      <CreateBudget />
+    <div className="mt-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <CreateBudget />
+      </div>
     </div>
   );
 }
