@@ -17,7 +17,7 @@ import { useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
 // import { toast } from "sonner";
 
-function CreateBudget() {
+function CreateBudget({ refreshData }) {
   const { user } = useUser();
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
@@ -38,6 +38,7 @@ function CreateBudget() {
     console.log(result);
 
     if (result) {
+      refreshData();
       alert("Budget Created Successfully");
     } else {
       alert("Failed to create budget");
@@ -48,7 +49,7 @@ function CreateBudget() {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <div className="bg-[#f5f1f1] p-10 rounded-md justify-center text-center border-2 cursor-pointer hover:shadow-md mt-5">
+          <div className="bg-[#f5f1f1] p-10 rounded-md justify-center text-center border-2 cursor-pointer hover:shadow-md mt-2">
             <h2 className="text-3xl">+</h2>
             <h2>Create New Budget</h2>
           </div>
