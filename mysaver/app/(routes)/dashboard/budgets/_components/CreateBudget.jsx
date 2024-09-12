@@ -13,8 +13,9 @@ import { Button } from "@/components/ui/button";
 import { db } from "@/Utils/dbConfig";
 import { Budgets } from "@/Utils/schema";
 import { useUser } from "@clerk/nextjs";
-import { Toaster } from "@/components/ui/sonner";
+// import { toast } from "@/components/ui/sonner";
 import { Input } from "@/components/ui/input";
+// import { toast } from "sonner";
 
 function CreateBudget() {
   const { user } = useUser();
@@ -30,22 +31,17 @@ function CreateBudget() {
       .values({
         name: name,
         amount: amount,
-        createdBy: user.primaryEmailAddress?.emailAddress, // Ensure user email is available
+        createdBy: user.primaryEmailAddress?.emailAddress,
       })
       .returning({ insertedId: Budgets.id });
 
     console.log(result);
 
-    //   if (result) {
-    //     Toaster("Budget Created Successfully");
-    //     setOpen(false); // Close the dialog after successful creation
-    //   } else {
-    //     Toaster("Failed to create budget");
-    //   }
-    // } catch (error) {
-    //   console.error("Error creating budget:", error);
-    //   Toaster("Error occurred while creating budget");
-    // }
+    if (result) {
+      alert("Budget Created Successfully");
+    } else {
+      alert("Failed to create budget");
+    }
   };
 
   return (

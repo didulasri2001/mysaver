@@ -3,6 +3,6 @@ export default defineConfig({
   schema: "./Utils/schema.jsx",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.NEXT_PUBLIC_DATABASE_URL,
+    url: "postgresql://mysaverDB_owner:i0HxPzXh6GBZ@ep-orange-boat-a5s6kty1.us-east-2.aws.neon.tech/mysaverDB?sslmode=require",
   },
 });
