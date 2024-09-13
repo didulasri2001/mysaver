@@ -1,9 +1,19 @@
+import { db } from "@/Utils/dbConfig";
+import { Expenses } from "@/Utils/schema";
+import { eq } from "drizzle-orm";
 import { Trash } from "lucide-react";
 import React from "react";
 
-function ExpenseListTable({ expensesList }) {
-  const deleteExpense = (expense) => {
-    console.log("Deleting", expense);
+function ExpenseListTable({ expensesList, refreshData }) {
+  const deleteExpense = async (expense) => {
+    const result = await db
+      .delete(Expenses)
+      .where(eq(Expenses.id, expense.id))
+      .returning();
+    if (result) {
+      alert("Expense Deleted Successfully");
+      refreshData();
+    }
   };
   return (
     <div className="mt-3">
@@ -23,7 +33,7 @@ function ExpenseListTable({ expensesList }) {
           <h2>{expense.createdAt}</h2>
           <h2>
             <Trash
-              className="text-red-600"
+              className="text-red-600 cursor-pointer"
               onClick={() => deleteExpense(expense)}
             />
           </h2>
