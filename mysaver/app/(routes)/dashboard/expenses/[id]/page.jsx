@@ -8,7 +8,7 @@ import Budgetitem from "../../budgets/_components/Budgetitem";
 import AddExpenses from "../_components/AddExpenses";
 import ExpenseListTable from "../_components/ExpenseListTable";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { ArrowLeft, PenBox, Trash } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,11 +20,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
+import EditBudget from "../_components/EditBudget";
 
 function ExpensesScreen({ params }) {
   const { user } = useUser();
   const [budgetInfo, setBudgetInfo] = useState();
   const [expensesList, setExpensesList] = useState([]);
+  const route = useRouter();
+
   useEffect(() => {
     user && getBudgetInfo();
   }, [user]);
@@ -38,6 +42,7 @@ function ExpensesScreen({ params }) {
       .from(Budgets)
       .leftJoin(Expenses, eq(Budgets.id, Expenses.budgetId))
       .where(eq(Budgets.createdBy, user.primaryEmailAddress?.emailAddress))
+      .where(eq(Budgets.id, params.id))
       .groupBy(Budgets.id);
 
     setBudgetInfo(result[0]);
@@ -53,44 +58,63 @@ function ExpensesScreen({ params }) {
     console.log(result);
   };
   const deleteBudget = async () => {
-    const result = await db
-      .delete()
-      .from(Budgets)
-      .where(eq(Budgets.id, params.id))
+    const deleteExpenseResult = await db
+      .delete(Expenses)
+      .where(eq(Expenses.budgetId, params.id))
       .returning();
-    console.log(result);
-    if (result) {
-      alert("Budget Deleted Successfully");
+    if (deleteExpenseResult) {
+      const result = await db
+        .delete(Budgets)
+
+        .where(eq(Budgets.id, params.id))
+        .returning();
+      if (result) {
+        alert("Budget Deleted Successfully");
+      }
     }
+    route.replace("/dashboard/budgets");
   };
 
   return (
     <div className="p-10">
       <h2 className="text-2xl font-bold flex justify-between items-center">
-        My Expenses
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button className="flex gap-2" variant="destructive">
-              <Trash />
-              Delete
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete your
-                current budget along with expenses.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={() => deleteBudget()}>
-                Continue
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <span className="flex gap-2 irems-center">
+          <ArrowLeft
+            onClick={() => route.back()}
+            className="cursor-pointer mt-1"
+          />
+          My Expenses
+        </span>
+
+        <div className="flex gap-2 items-center">
+          <EditBudget
+            budgetInfo={budgetInfo}
+            refreshData={() => getBudgetInfo()}
+          />
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="flex gap-2" variant="destructive">
+                <Trash />
+                Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-[#f5f1f1] ">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your current budget along with expenses.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => deleteBudget()}>
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-5">
