@@ -1,15 +1,13 @@
 "use client";
-import { UserButton, useUser } from "@clerk/nextjs";
-import React, { useEffect, useState } from "react";
-import CardInfo from "./_components/CardInfo";
+import React, { useState, useEffect } from "react";
+import ExpenseListTable from "./_components/ExpenseListTable";
+
 import { db } from "@/Utils/dbConfig";
 import { Budgets, Expenses } from "@/Utils/schema";
+import { useUser } from "@clerk/nextjs";
 import { eq, getTableColumns, sql } from "drizzle-orm";
-import BarchartDashboard from "./_components/BarchartDashboard";
-import Budgetitem from "./budgets/_components/Budgetitem";
-import ExpenseListTable from "./expenses/_components/ExpenseListTable";
 
-function Dashboard() {
+function ExpensesPage() {
   const { user } = useUser();
   const [budgetList, setBudgetList] = useState([]);
   const [expensesList, setExpensesList] = useState([]);
@@ -48,34 +46,15 @@ function Dashboard() {
     // .orderBy(Expenses.createdAt.desc);
     setExpensesList(result);
   };
-
   return (
-    <div className="p-5">
-      <h2 className="font-bold text-3xl text-gray-500">
-        Hi, {user?.fullName} 👋
-      </h2>
-      <p className="text-gray-500 mt-2">
-        Here's what happenning with your money, Let's manage your expense.
-      </p>
-      <CardInfo budgetList={budgetList} />
-      <div className="grid grid-cols-1 md:grid-cols-3 mt-6 gap-5">
-        <div className="md:col-span-2">
-          <BarchartDashboard budgetList={budgetList} />
-          <ExpenseListTable
-            expensesList={expensesList}
-            refreshData={() => getBudgetList()}
-          />
-        </div>
-        <div className="grid gap-5">
-          <h2 className="font-bold text-lg">Latest Budgets</h2>
-
-          {budgetList.map((budget, index) => (
-            <Budgetitem budget={budget} key={index} />
-          ))}
-        </div>
-      </div>
+    <div className="p-10">
+      <h2 className="font-bold text-3xl">My Expenses</h2>
+      <ExpenseListTable
+        expensesList={expensesList}
+        refreshData={() => getBudgetList()}
+      />
     </div>
   );
 }
 
-export default Dashboard;
+export default ExpensesPage;
