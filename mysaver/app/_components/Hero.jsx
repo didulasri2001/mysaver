@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 function Hero() {
@@ -7,7 +8,7 @@ function Hero() {
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-3xl font-extrabold sm:text-6xl mb-5">
             Manage Your Expense
-            <strong className="font-extrabold text-[#2e81b4] sm:block mt-3">
+            <strong className="font-extrabold text-[#2e81b4] sm:block mt-1">
               Control Your Money
             </strong>
           </h1>
@@ -24,6 +25,7 @@ function Hero() {
               Get Started
             </a>
           </div>
+          {/* <Image src={"/Expense1.jpg"} alt="logo" width={500} height={500} /> */}
         </div>
       </div>
     </section>
