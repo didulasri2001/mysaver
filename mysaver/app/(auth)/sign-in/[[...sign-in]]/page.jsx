@@ -1,7 +1,10 @@
+"use client";
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Page() {
+  const path = usePathname();
   return (
     <div className="bg-white ">
       <Image
@@ -26,7 +29,12 @@ export default function Page() {
 
           <main className="flex items-center justify-center  lg:col-span-7  lg:py-12 xl:col-span-6 mt-4">
             <div className="max-w-xl lg:max-w-3xl">
-              <SignIn />
+              <SignIn
+                onSignIn={() => {
+                  // Redirect to the dashboard after successful sign-in
+                  path("/dashboard");
+                }}
+              />
             </div>
           </main>
         </div>
