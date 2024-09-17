@@ -1,10 +1,10 @@
 "use client";
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const path = usePathname();
+  const user = useRouter();
   return (
     <div className="bg-white ">
       <Image
@@ -32,7 +32,7 @@ export default function Page() {
               <SignIn
                 onSignIn={() => {
                   // Redirect to the dashboard after successful sign-in
-                  path("/dashboard");
+                  router.push("http://localhost:3001/dashboard"); // Use router.push to navigate
                 }}
               />
             </div>
